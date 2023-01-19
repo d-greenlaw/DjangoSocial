@@ -21,13 +21,15 @@
 
 ## Project Overview
 
-* You can test this project in the [Live Server](https://bit.ly/django-social-live). Use the dummy accounts found on the login page, one for each tab to emulate multiple user interaction, or make your own account!
+* Please browse the code for this project here on GitHub. It is my cornerstone project and displays my most current skills!
 
-* Here is a [Demo Video](https://bit.ly/django-social-demo) of the project in action.
+* Here you can watch a brief [Demo Video](https://drive.google.com/file/d/1Wiy-JPdOTzLNMBUP2e2uVQvvRgaTZXnT/view?usp=sharing) of the project in action.
 
-* Or feel free to download the code and run the app on your local machine.
+* You can also test the app on the [Live Server](https://djangosocial-production.up.railway.app/). Feel free to use the dummy accounts found on the login page, or make your own account.
 
-To clone and run this application, you'll need [Git](https://git-scm.com), and [Python](https://www.python.org/downloads/) installed. From your command line:
+To clone and run this application locally you'll need [Git](https://git-scm.com), and [Python](https://www.python.org/downloads/) installed. 
+
+From your command line:
 
 ```bash
 # Clone this repository
