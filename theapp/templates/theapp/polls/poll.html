@@ -1,0 +1,41 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Poll {% endblock title %}
+{% block content %}
+
+<div class="row">
+    <h2 class="text-center mb-4 mt-4">Respond to Poll</h2>
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="me-3">
+                        <img class="rounded-circle img-fluid" style="width:60px;" src="/media/{{poll.author.profile_photo}}"
+                            alt="">
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="mb-0 d-inline-block">{{poll.author.handle}}</h5>
+                                <p class="mb-0 text-primary">{{poll.created|date:"D d M Y"}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-center mt-3 mb-3">{{poll.question}}</h3>
+                <div class="poll-box-style" id="poll-box">
+                    {% for choice in poll_choices %}
+                    <div class="row m-5">
+                        <button class="btn btn-outline-primary" onclick="submitPollResponse(this)">{{choice.choice}}</button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script src="{% static 'js/custom/poll.js' %}"></script>
+{% endblock content %}

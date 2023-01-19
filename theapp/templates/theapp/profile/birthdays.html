@@ -1,0 +1,81 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Birthdays {% endblock title %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12" id="birthday-container">
+            <!-- AJAX Goes Here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    var birthdayContainer = document.getElementById('birthday-container')
+    var birthdayBlocks = document.getElementsByClassName('birthday-block')
+    $.ajax({
+        type: 'GET',
+        url: '/get-all-birthdays-ajax/',
+        success: function (response) {
+            const this_month = response.this_month
+            const birthday_months = response.birthday_months
+            const birthdays = response.birthdays
+
+            // First load all of the blocks for each month in 'birthday_months'
+            birthday_months.forEach(el => {
+                birthdayContainer.innerHTML += `
+            <div class="birthday-block" id="${el.month}">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between rounded border-bottom-0">
+                        <div class="header-title">
+                            <h4 class="card-title">${el.this_month ? 'This Month' : el.month}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="${el.month}-inner">
+                    <!-- AJAX Goes Here -->
+                </div>
+            </div>
+            `
+            });
+            // For each birthday block, loop "birthdays"
+            // if the id/month matches the birthday_month, add the birthday to it
+            birthdays.forEach(el => {
+                document.getElementById(`${el.birthday_month}-inner`).innerHTML += `
+        <div class="col-lg-6 col-md-12">
+            <div class="card">
+                <div class="card-body">
+                <div class="iq-birthday-block">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <a href="#">
+                            <img style="width:70%;" src="/media/${el.profile_photo}" alt="profile-img" class="img-fluid">
+                            </a>
+                            <div class="friend-info" style="margin-right:15%;">
+                                <h5>${el.friend_handle}</h5>
+                                <p class="mb-0">${el.birthday_is}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 p-1">
+                                <a href="/user-profile/${el.friend_id}" class="w-100 btn btn-sm btn-outline-primary">Profile</a>
+                            </div>
+                            <div class="col-md-12 p-1">
+                                <a href="/message-thread/${el.friend_id}" class="w-100 btn btn-sm btn-primary">Message</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        `
+            });
+        },
+        error: function (error) {
+            console.log('error', error)
+        }
+    })
+</script>
+
+{% endblock content %}

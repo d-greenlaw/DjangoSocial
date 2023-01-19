@@ -1,0 +1,114 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Sign in {% endblock title %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<section class="sign-in-page">
+  <div id="container-inside">
+    <div id="circle-small"></div>
+    <div id="circle-medium"></div>
+    <div id="circle-large"></div>
+    <div id="circle-xlarge"></div>
+    <div id="circle-xxlarge"></div>
+  </div>
+  <div class="container p-0">
+    <div class="row no-gutters">
+      <div class="col-md-6 text-center pt-5">
+        <div class="sign-in-detail text-white">
+          <h2 class="sign-in-logo mb-5" style="color:white;">DjangoSocial <img src="{% static 'images/logo-white.png' %}"></h2>
+          <div class="sign-slider overflow-hidden ">
+            <ul class="swiper-wrapper list-inline m-0 p-0 ">
+              <li class="swiper-slide">
+                <img style="border-radius:4%;" src="{% static 'images/login/1.png' %}" class="img-fluid mb-4" alt="logo">
+                <h4 class="mb-1 text-white">Find new friends</h4>
+                <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+              </li>
+              <li class="swiper-slide">
+                <img style="border-radius:4%;" src="{% static 'images/login/2.png' %}" class="img-fluid mb-4" alt="logo">
+                <h4 class="mb-1 text-white">Connect with the world</h4>
+                <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+              </li>
+              <li class="swiper-slide">
+                <img style="border-radius:4%;" src="{% static 'images/login/3.png' %}" class="img-fluid mb-4" alt="logo">
+                <h4 class="mb-1 text-white">Create new events</h4>
+                <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 bg-white pt-5 pt-5 pb-lg-0 pb-5">
+        <div class="sign-in-from">
+          <h1 class="mb-0">Sign in</h1>
+
+          <p class="small mb-0">Don't have an account? <a href="{% url 'signup' %}">Sign up!</a></p>
+
+          {% if messages %}
+          <div id="alert" class="alert-warning p-2 pt-4 mt-4">
+            {% for message in messages %}
+            <p class="text-center">{{ message }}</p>
+            {% endfor %}
+          </div>
+          <script>
+            const alertBox = document.getElementById('alert')
+            function hideAlert() {
+              alertBox.remove()
+            }
+            setTimeout(hideAlert, 6000)
+          </script>
+          {% endif %}
+
+          <form class="mt-4" method="POST" id="login-form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="row">
+              <div class="col-12">
+                <button class="btn btn-primary mt-3 w-100" type="submit">Log In</button>
+              </div>
+            </div>
+          </form>
+
+
+          <div class="card p-3">
+            <div class="row mt-4">
+              <div class="col-md-12 mb-2 text-center">
+                <h4><b>Login as test users</b> <br> One for each tab to emulate multi-user interaction</h4>
+              </div>
+              <div class="col-md-6">
+                <p onclick="loginAsTestUser(1)" class="btn btn-sm btn-primary">Login as Test User 1</p>
+              </div>
+              <div class="col-md-6">
+                <p onclick="loginAsTestUser(2)" class="btn btn-sm btn-primary">Login as Test User 2</p>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            function loginAsTestUser(userNumber) {
+              if (userNumber == 1) {
+                usernameInput = document.getElementById('id_username')
+                passwordInput = document.getElementById('id_password')
+                usernameInput.value = 'testing@djangosocial.app'
+                passwordInput.value = 'DjSoc123'
+              } else {
+                usernameInput = document.getElementById('id_username')
+                passwordInput = document.getElementById('id_password')
+                usernameInput.value = 'testing2@djangosocial.app'
+                passwordInput.value = 'DjSoc123'
+              }
+              const loginForm = document.getElementById('login-form')
+              loginForm.submit()
+            }
+          </script>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}

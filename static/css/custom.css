@@ -1,0 +1,184 @@
+/* Images Preview CSS */
+output {
+   width: 100%;
+   min-height: 150px;
+   display: flex;
+   justify-content: flex-start;
+   flex-wrap: wrap;
+   gap: 15px;
+   position: relative;
+   border-radius: 5px;
+}
+
+output #image-upload-input {
+   height: 150px;
+   border-radius: 5px;
+   box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+   overflow: hidden;
+   position: relative;
+}
+
+output #image-upload-input img {
+   height: 100%;
+   width: 100%;
+}
+
+/* output #image-upload-input span {
+    position: absolute;
+    top: -4px;
+    right: 4px;
+    cursor: pointer;
+    font-size: 35px;
+    color: white;
+    }
+ 
+    output #image-upload-input span:hover {
+    opacity: 0.8;
+    } */
+
+output .span--hidden {
+   visibility: hidden;
+}
+
+/* END */
+pre {
+   font-family: var(--bs-font-sans-serif);
+   font-size: .875rem;
+   font-weight: 400;
+   line-height: 1.8;
+   color: #777d74;
+}
+
+.preview-remove-btn {
+   font-size: 25px;
+   text-align: right;
+   cursor: pointer;
+   margin-top: -4%;
+   margin-bottom: -4%;
+}
+
+.gif-emoji {
+   width: 25px;
+   height: 25px;
+}
+
+.reaction-button {
+   background-color: transparent;
+   border-color: transparent;
+   width: 40px;
+}
+
+/* #total-comment-adjust {
+       margin-left:-45%;
+    }
+    @media (max-width: 780px) {
+       #total-comment-adjust {
+       margin-left: 0%;
+    }
+    } */
+
+
+.poll-box-style {
+   border: 1px solid #e6e5e5;
+   border-radius: 4%;
+}
+
+.text-light {
+   color: #c3c2c2 !important;
+}
+
+.badge-number {
+   position: absolute;
+   margin-left: -7%;
+   margin-top: 48%;
+   font-weight: normal;
+   font-size: 12px;
+   padding: 3px 6px;
+}
+
+.badge {
+   line-height: .75rem;
+}
+
+/* Signup Form */
+
+.login-block {
+   margin: 30px auto;
+   min-height: 93.6vh
+}
+
+.login-block .auth-box {
+   margin: 20px auto 0;
+   max-width: 450px !important
+}
+
+.card {
+   border-radius: 5px;
+   -webkit-box-shadow: 0 0 5px 0 rgba(43, 43, 43, .1), 0 11px 6px -7px rgba(43, 43, 43, .1);
+   box-shadow: 0 0 5px 0 rgba(43, 43, 43, .1), 0 11px 6px -7px rgba(43, 43, 43, .1);
+   border: none;
+   margin-bottom: 30px;
+   -webkit-transition: all .3s ease-in-out;
+   transition: all .3s ease-in-out;
+   background-color: #fff;
+}
+
+.card .card-block {
+   padding: 1.25rem
+}
+
+.f-80 {
+   font-size: 80px
+}
+
+.form-group {
+   margin-bottom: 1.25em
+}
+
+.form-material .form-control {
+   display: inline-block;
+   height: 43px;
+   width: 100%;
+   border: none;
+   border-radius: 0;
+   font-size: 16px;
+   font-weight: 400;
+   padding: 9px;
+   background-color: transparent;
+   -webkit-box-shadow: none;
+   box-shadow: none;
+   border-bottom: 1px solid #ccc
+}
+
+.or-container {
+   align-items: center;
+   color: #ccc;
+   display: flex;
+   margin: 25px 0;
+}
+
+.line-separator {
+   background-color: #ccc;
+   flex-grow: 5;
+   height: 1px;
+}
+
+.or-label {
+   flex-grow: 1;
+   margin: 0 15px;
+   text-align: center;
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+   border-color: #4444 !important;
+}
+
+.form-control.is-invalid,
+.was-validated .form-control:invalid {
+   background-image: none !important;
+}
+
+#hint_id_password1 {
+   display: none;
+}

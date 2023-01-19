@@ -1,0 +1,258 @@
+{% load static %}
+<!-- Create Event Modal -->
+<div class="modal fade" id="new-event-modal" tabindex="-1" aria-labelledby="new-event-modalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="new-event-modalLabel">Create Your Event</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <h4 class="text-center">Create a new event and share it <br> with your followers</h4>
+            <div class="row mt-2">
+               <div class="col-md-12">
+                  <form id="create-event-form" class="row g-3">
+                     <div class="row mt-3">
+                        <div class="form-group col-md-6 mt-2">
+                           <p class="text-center">What is Your Event All About?</p>
+                           <input type="text" class="form-control" id="newEventName" required>
+                        </div>
+                        <div class="form-group col-md-6 mt-2">
+                           <p class="text-center">What Type of Event?</p>
+                           <select class="form-control" name="newEventType" id="newEventType" required>
+                              <option value="" selected>Select an Event Type</option>
+                              <option value="Virtual">Virtual</option>
+                              <option value="In Person">In Person</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="row mt-3">
+                        <div class="form-group col-md-6 mt-2">
+                           <p class="text-center">This Event Starts</p>
+                           <div class="row">
+                              <div class="col-md-6">
+                                 <input type="date" class="form-control" id="newEventStartsDate" required>
+                              </div>
+                              <div class="col-md-6">
+                                 <select class="form-control" id="newEventStartsTime" required>
+                                    {% include 'theapp/events/times.html' %}
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="form-group col-md-6 mt-2">
+                           <p class="text-center">This Event Ends</p>
+                           <div class="row">
+                              <div class="col-md-6">
+                                 <input type="date" class="form-control" id="newEventEndsDate" required>
+                              </div>
+                              <div class="col-md-6">
+                                 <select class="form-control" id="newEventEndsTime" required>
+                                    {% include 'theapp/events/times.html' %}
+                                 </select>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="form-group col-md-12 mt-3">
+                        <p class="text-center">Write Something About This Event</p>
+                        <textarea name="" class="form-control" id="newEventNotes" cols="30" rows="2"></textarea>
+                     </div>
+                     <div class="row justify-content-center">
+                        <div class="form-group col-md-12 text-center">
+                           <button type="submit" class="mt-4 btn btn-primary">Save and Post</button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Post Modal -->
+<div class="modal fade" id="post-modal" tabindex="-1" aria-labelledby="post-modalLabel" aria-hidden="true">
+   <div class="modal-dialog modal-lg modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="post-modalLabel">Create Post</h5>
+            <button onclick="clearPostForm()" type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <div class="d-flex align-items-center">
+               <div class="user-img">
+                  <img src="/media/{{user.profile_photo}}" alt="userimg" class="avatar-60 rounded-circle img-fluid">
+               </div>
+               <form id="create-post-form" class="post-text ms-3 w-100 ">
+                  <textarea class="form-control rounded" id="create-post-input"
+                     placeholder="What's on your mind, {{user.handle}}?" style="border:none;" rows="5"
+                     cols="33"></textarea>
+                  <button id="post-submit-btn" type="submit" class="btn btn-light d-block w-100 mt-3">Post</button>
+               </form>
+            </div>
+            <hr>
+            <div id="url-metadata-preview">
+               <!-- AJAX Goes Here -->
+            </div>
+            <ul class="d-flex flex-wrap align-items-center list-inline m-0 p-0">
+               <li class="col-md-6 mb-3">
+                  <div class="dropdown bg-soft-primary rounded p-2 pointer me-3">
+                     <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        role="button">
+                        <img src="{% static 'images/small/07.png' %}" alt="icon" class="img-fluid"> Photo
+                     </span>
+                     <div class="dropdown-menu m-0 p-0">
+                        <!-- ADD CONTENT HERE -->
+                        <input id="image-upload-input" class="form-control rounded" type="file"
+                           accept="image/jpeg, image/png, image/jpg" id="multiFiles" name="files[]" multiple="multiple">
+                        <output></output>
+                     </div>
+                  </div>
+               </li>
+               <li class="col-md-6 mb-3">
+                  <div class="bg-soft-primary rounded p-2 pointer me-3"><a href="#" onclick="createPoll()"><img
+                           src="{% static 'images/small/08.png' %}" alt="icon" class="img-fluid"> Poll</a></div>
+               </li>
+               <li class="col-md-6 mb-3">
+                  <div class="emoji-btn bg-soft-primary rounded p-2 pointer me-3"><a href="#"></a><img
+                        src="{% static 'images/small/09.png' %}" alt="icon" class="img-fluid"> Feeling</div>
+               </li>
+               <li class="col-md-6 mb-3">
+                  <div class="dropdown bg-soft-primary rounded p-2 pointer me-3">
+                     <span class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                        role="button">
+                        <img src="{% static 'images/small/10.png' %}" alt="icon" class="img-fluid"> Gif
+                     </span>
+                     <div class="dropdown-menu m-0 p-0">
+                        <input id="gif-search-input" type="text" class="form-control rounded"
+                           placeholder="Search for a Gif">
+                        <div id="gif-search-results-box" class="row">
+                           <!-- GIF Search Results Go Here -->
+                        </div>
+                     </div>
+                  </div>
+               </li>
+               <li class="col-md-6 mb-3">
+                  <div class="bg-soft-primary rounded p-2 pointer me-3"><a href="#" onclick="openEventModal()"><img
+                           src="{% static 'images/small/11.png' %}" alt="icon" class="img-fluid"> Event</a></div>
+               </li>
+            </ul>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Delete Modal -->
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modalLabel" aria-hidden="true">
+   <div class="modal-dialog   modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="delete-modalLabel">Delete Comment</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <h4 class="text-center">Are you sure you want to delete this comment?</h4>
+            <div class="row">
+               <div class="col-md-6">
+                  <button id="delete-proceed-btn" class="btn btn-primary d-block w-100 mt-3">Yes</button>
+               </div>
+               <div class="col-md-6">
+                  <button class="btn btn-secondary d-block w-100 mt-3" data-bs-dismiss="modal">No</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Embed Modal -->
+<div class="modal fade" id="embed-modal" tabindex="-1" aria-labelledby="embed-modalLabel" aria-hidden="true">
+   <div class="modal-dialog   modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="embed-modalLabel">Embed Post</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <h4 class="text-center">Share this Post by embedding it</h4>
+            <div class="row mt-2">
+               <div class="col-md-12 text-center">
+                  <textarea class="form-control rounded" name="" id="embed-text-area" cols="48" rows="2">
+                      <!-- JS Goes Here -->
+                   </textarea>
+               </div>
+               <div class="col-md-12">
+                  <button class="btn btn-primary d-block w-100 mt-3" onclick="copyEmbedCode()">Copy This Code</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Copy Post Modal -->
+<div class="modal fade" id="copy-post-modal" tabindex="-1" aria-labelledby="copy-post-modalLabel" aria-hidden="true">
+   <div class="modal-dialog   modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="copy-post-modalLabel">Copy Link to This Post</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <h4 class="text-center">Share this Post by copying link to it</h4>
+            <div class="row mt-2">
+               <div class="col-md-12 text-center">
+                  <input class="form-control rounded" type="text" id="copy-post-input"><!-- JS Goes Here -->
+               </div>
+               <div class="col-md-12">
+                  <button class="btn btn-primary d-block w-100 mt-3" onclick="copyPostLink()">Copy Post Link</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- Create Poll Modal -->
+<div class="modal fade" id="create-poll-modal" tabindex="-1" aria-labelledby="create-poll-modalLabel"
+   aria-hidden="true">
+   <div class="modal-dialog modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="create-poll-modalLabel">Create Your Poll</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <form action="{% url 'create-poll' %}" method="POST">
+               {% csrf_token %}
+               <!-- Title -->
+               <div class="row">
+                  <div class="col-md-12 mt-4">
+                     <input name="poll_question" id="poll_question" type="text" class="form-control"
+                        placeholder="Ask your audience a question" required
+                        oninvalid="this.setCustomValidity('Forgetting something?')"
+                        oninput="this.setCustomValidity('')">
+                  </div>
+                  <!-- Dynamic Text Field Titles (Choices) -->
+                  <div class="col-md-12 mt-4" id="choices_section">
+                     <input name="poll_choices" id="poll_choices" type="text" class="form-control"
+                        placeholder="Write a choice" required
+                        oninvalid="this.setCustomValidity('Forgetting something?')"
+                        oninput="this.setCustomValidity('')">
+                  </div>
+                  <div class="col-md-12">
+                     <span onclick="addTextField()" class="btn btn-outline-primary mt-3">+ Add Choice</span>
+                     <span onclick="removeLastTextField()" id="removeBtn" class="invisible btn btn-outline-dark mt-3">-
+                        Remove Choice</span>
+                  </div>
+                  <!-- Submit Button -->
+                  <div class="col-md-12 text-center mt-2">
+                     <button type="submit" class="text-center btn btn-primary mt-1">Save and Post</button>
+                  </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>

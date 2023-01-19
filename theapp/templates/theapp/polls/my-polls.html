@@ -1,0 +1,51 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | My Polls {% endblock title %}
+{% block content %}
+
+<div class="container">
+    <div class="row" id="friend-list">
+        <h2 class="text-center">My Polls</h2>
+        {% if polls %}
+        <div class="row mt-4 mb-4">
+            <div class="col-md-12 text-center">
+                <a href="#" onclick="createPoll()" class="btn btn-primary">Create Another Poll</a>
+            </div>
+        </div>
+        {% for poll in polls %}
+        <div class="col-md-6">
+            <div class="card card-block card-stretch card-height">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <h3>{{poll.question}}</h3>
+                        <div>
+                            <a class="mt-2 mb-2 btn btn-outline-primary" href="{% url 'poll' poll.id %}">Answer This
+                                Poll</a>
+                            <a class="mt-2 mb-2 btn btn-outline-primary" href="{% url 'poll-results' poll.id %}">View
+                                Poll Results</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <a href="{% url 'delete-poll' poll.id %}" class="text-danger"><i
+                                class="text-danger ri-delete-bin-2-fill"></i> Delete Poll</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="row mt-4 mb-4">
+            <div class="col-md-12 text-center">
+                <a href="#" onclick="createPoll()" class="btn btn-primary">Create Your First Poll</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Include theapp/components/modals.html-->
+{% include "theapp/components/modals.html" %}
+
+<script src="{% static 'js/custom/create-poll.js' %}"></script>
+
+{% endblock content %}

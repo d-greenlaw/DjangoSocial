@@ -1,0 +1,221 @@
+<!-- ViewEventModal -->
+<div class="modal fade" id="view-event-modal" tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Update an Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <section class="section d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 d-flex flex-column align-items-center justify-content-center">
+                  <form id="eventUpdateForm" class="row g-3">
+                    <div class="row mt-3">
+                      <div class="form-group col-md-12 mt-2">
+                        <p class="text-center">What Type of Event?</p>
+                        <select class="form-control" id="eventTypeUpdate" required>
+                          <option value="Virtual">Virtual</option>
+                          <option value="In Person">In Person</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-12 mt-2">
+                        <p class="text-center">What is Your Event All About?</p>
+                        <input type="text" class="form-control" id="eventNameUpdate" placeholder="">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-12 mt-2">
+                        <p class="text-center">This Event Starts</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <input type="date" class="form-control" id="newEventStartsDateUpdate" required>
+                          </div>
+                          <div class="col-md-6">
+                            <select class="form-control" id="newEventStartsTimeUpdate" required>
+                              {% include 'theapp/events/times.html' %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-12 mt-2">
+                        <p class="text-center">This Event Ends</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <input type="date" class="form-control" id="newEventEndsDateUpdate" required>
+                          </div>
+                          <div class="col-md-6">
+                            <select class="form-control" id="newEventEndsTimeUpdate" required>
+                              {% include 'theapp/events/times.html' %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12 mt-2">
+                      <p class="text-center">Write Something About This Event</p>
+                      <textarea class="form-control" id="notesUpdate" cols="30" rows="3"></textarea>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="form-group col-md-12 text-center">
+                        <button type="submit" class="mt-4 btn btn-primary">Update Your Event</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End ViewEventModal -->
+
+<!-- CreateEventModal -->
+<div class="modal fade" id="create-event-modal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Your Event</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <section class="section d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 d-flex flex-column align-items-center justify-content-center">
+                  <form id="create-event-form" class="row g-3">
+                    <div class="row mt-3">
+                      <div class="form-group col-md-6 mt-2">
+                        <p class="text-center">What is Your Event All About?</p>
+                        <input type="text" class="form-control" id="newEventName" required>
+                      </div>
+                      <div class="form-group col-md-6 mt-2">
+                        <p class="text-center">What Type of Event?</p>
+                        <select class="form-control" name="newEventType" id="newEventType" required>
+                          <option value="" selected>Select an Event Type</option>
+                          <option value="Virtual">Virtual</option>
+                          <option value="In Person">In Person</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row mt-3">
+                      <div class="form-group col-md-6 mt-2">
+                        <p class="text-center">This Event Starts</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <input type="date" class="form-control" id="newEventStartsDate" required>
+                          </div>
+                          <div class="col-md-6">
+                            <select class="form-control" id="newEventStartsTime" required>
+                              {% include 'theapp/events/times.html' %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-6 mt-2">
+                        <p class="text-center">This Event Ends</p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <input type="date" class="form-control" id="newEventEndsDate" required>
+                          </div>
+                          <div class="col-md-6">
+                            <select class="form-control" id="newEventEndsTime" required>
+                              {% include 'theapp/events/times.html' %}
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group col-md-12 mt-3">
+                      <p class="text-center">Write Something About This Event</p>
+                      <textarea name="" class="form-control" id="newEventNotes" cols="30" rows="2"></textarea>
+                    </div>
+                    <div class="row justify-content-center">
+                      <div class="form-group col-md-12 text-center">
+                        <button type="submit" class="mt-4 btn btn-primary">Save and Post</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End CreateEventModal -->
+
+<!-- DeleteEventModal -->
+<div class="modal fade" id="delete-event-modal" tabindex="-1">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <section class="section d-flex flex-column align-items-center justify-content-center py-4">
+            <div class="container">
+              <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12 d-flex flex-column align-items-center justify-content-center">
+                  <p id="deleteModalTitle" class="mt-2 mb-2"><!-- JS Goes Here --></p>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <p style="cursor:pointer; color:#fff !important;" id="deleteEventTrashCan" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete
+                      </p>
+                    </div>
+                    <div class="col-md-6">
+                      <a href="" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</a>
+                    </div>
+                  </div>
+                  <script>
+                    function getEventIdForDelete(button) {
+                      var id = button.getAttribute("data-tip");
+                      var event_name_span = button.innerHTML
+                      var event_name_span = event_name_span.replace('style="color:transparent;"', '');
+                      console.log(id)
+                      console.log(event_name_span)
+                      var deleteEventTrashCan = document.getElementById('deleteEventTrashCan')
+                      var deleteModalTitle = document.getElementById('deleteModalTitle')
+                      deleteModalTitle.innerHTML += `Delete this event: "${event_name_span}"?`
+                      deleteEventTrashCan.addEventListener("click", () => {
+                        $.ajax({
+                          type: "GET",
+                          url: '/remove-event',
+                          data: { 'id': id },
+                          dataType: "json",
+                          success: function (data) {
+                            $("#calendar").fullCalendar('refetchEvents');
+                            $("#delete-event-modal").modal("toggle"); // hide modal
+                            deleteModalTitle.innerHTML = ''
+                          },
+                          error: function (data) {
+                            // alert("Oops! There's a problem.");
+                          }
+                        });
+                      });
+                    };
+                  </script>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End DeleteEventModal -->

@@ -1,0 +1,41 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Poll Results {% endblock title %}
+{% block content %}
+
+<div class="row">
+    <h2 class="text-center mb-4 mt-4">Poll Results</h2>
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="me-3">
+                        <img class="rounded-circle img-fluid" style="width:60px;" src="/media/{{poll.author.profile_photo}}"
+                            alt="">
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5 class="mb-0 d-inline-block">{{poll.author.handle}}</h5>
+                                <p class="mb-0 text-primary">{{poll.created|date:"D d M Y"}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="text-center mb-3">{{poll.question}}</h3>
+                <div class="poll-box-style" id="poll-box">
+                    <!-- AJAX Goes Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script src="{% static 'js/custom/poll.js' %}"></script>
+<script>
+    // Call Poll Results from poll.js
+    showPollResults();
+</script>
+
+{% endblock content %}

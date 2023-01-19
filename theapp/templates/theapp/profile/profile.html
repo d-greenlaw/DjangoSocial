@@ -1,0 +1,2422 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Profile {% endblock title %}
+{% block content %}
+
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <div class="card">
+            <div class="card-body profile-page p-0">
+               <div class="profile-header">
+                  <div class="position-relative">
+                     <img id="profile-header-photo" src="" alt="profile-bg" class="rounded img-fluid">
+                     <ul class="header-nav list-inline d-flex flex-wrap justify-end p-0 m-0">
+                        {% if current_users_profile %}
+                        <li><a style="z-index: 1; position: relative;" href="#" data-bs-toggle="modal"
+                              data-bs-target="#header-photo-update-modal"><i class="ri-pencil-line"></i></a></li>
+                        <!-- <li><a href="#"><i class="ri-settings-4-line"></i></a></li> -->
+                        {% else %}
+                        {% endif %}
+                     </ul>
+                  </div>
+                  <div class="user-detail text-center mb-3">
+                     <div class="profile-img">
+                        <img src="/media/{{current_user.profile_photo}}" alt="profile-img" class="avatar-130 img-fluid" />
+                     </div>
+                     <div class="profile-detail">
+                        <h3 class="">{{current_user.handle}}</h3>
+                     </div>
+                  </div>
+                  <div class="profile-info p-3 d-flex align-items-center justify-content-between position-relative">
+                     <div class="social-links">
+                        <ul
+                           class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+                           {% if current_user == user %}
+                           <li class="text-center md-pe-3 pe-0">
+                              <p class="btn btn-primary" style="background-color:transparent; border:none;"></p>
+                           </li>
+                           {% else %}
+                           {% if user in current_user.get_friends %}
+                           <li class="text-center md-pe-3 pe-0">
+                              <a class="btn btn-outline-dark" href="/unfriend-user/{{current_user.id}}"><i
+                                    class="ri-close-circle-line"></i> Unfriend</a>
+                           </li>
+                           {% else %}
+                           <li class="text-center md-pe-3 pe-0">
+                              <p class="btn btn-primary" id="send-friend-request"><i class="ri-add-circle-line"></i> Add
+                                 Friend</p>
+                           </li>
+                           {% endif %}
+                           {% endif %}
+                        </ul>
+                     </div>
+                     <div class="social-info">
+                        <ul
+                           class="social-data-block d-flex align-items-center justify-content-between list-inline p-0 m-0">
+                           <li class="text-center ps-3">
+                              <h6>Posts</h6>
+                              <p class="mb-0">{{current_user.get_posts_count}}</p>
+                           </li>
+                           <li class="text-center ps-3">
+                              <h6>Followers</h6>
+                              <p class="mb-0">{{current_user.get_following_me_count}}</p>
+                           </li>
+                           <li class="text-center ps-3">
+                              <h6>Following</h6>
+                              <p class="mb-0">{{current_user.get_im_following_count}}</p>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-body p-0">
+               {% if current_users_profile %}
+               <div class="user-tabing">
+                  <ul class="nav nav-pills d-flex align-items-center justify-content-center profile-feed-items p-0 m-0">
+                     <li class="nav-item col-12 col-sm-3 p-0">
+                        <a class="nav-link active" href="#pills-timeline-tab" data-bs-toggle="pill"
+                           data-bs-target="#timeline" role="button">Timeline</a>
+                     </li>
+                     <li class="nav-item col-12 col-sm-3 p-0">
+                        <a class="nav-link" href="#pills-about-tab" data-bs-toggle="pill" data-bs-target="#about"
+                           role="button">About</a>
+                     </li>
+                     <li class="nav-item col-12 col-sm-3 p-0">
+                        <a class="nav-link" href="#pills-friends-tab" data-bs-toggle="pill" data-bs-target="#friends"
+                           role="button">Friends</a>
+                     </li>
+                     <li class="nav-item col-12 col-sm-3 p-0">
+                        <a class="nav-link" href="#pills-photos-tab" data-bs-toggle="pill" data-bs-target="#photos"
+                           role="button">Photos</a>
+                     </li>
+                  </ul>
+               </div>
+               {% else %}
+               {% endif %}
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-12">
+         <div class="tab-content">
+            <div class="tab-pane fade show active" id="timeline" role="tabpanel">
+               <div class="card-body p-0">
+                  <div class="row">
+                     <div class="col-lg-4">
+                        <!-- <div class="card">
+                           <div class="card-body">
+                              <a href="#"><span class="badge badge-pill bg-primary font-weight-normal ms-auto me-1"><i class="ri-star-line"></i></span> 27 Items for yoou</a>
+                           </div>
+                        </div> 
+                        <div class="card">
+                           <div class="card-header d-flex justify-content-between">
+                              <div class="header-title">
+                                 <h4 class="card-title">Life Event</h4>
+                              </div>
+                              <div class="card-header-toolbar d-flex align-items-center">
+                                 <p class="m-0"><a href="javacsript:void();"> Create </a></p>
+                              </div>
+                           </div>
+                           <div class="card-body">
+                              <div class="row">
+                                 <div class="col-sm-12">
+                                    <div class="event-post position-relative">
+                                       <a href="#"><img src="{% static 'images/page-img/07.jpg' %}" alt="gallary-image" class="img-fluid rounded"></a>
+                                       <div class="job-icon-position">
+                                          <div class="job-icon bg-primary p-2 d-inline-block rounded-circle"><i class="ri-briefcase-line text-white"></i></div>
+                                       </div>
+                                       <div class="card-body text-center p-2">
+                                          <h5>Started New Job at Apple</h5>
+                                          <p>January 24, 2019</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 <div class="col-sm-12">
+                                    <div class="event-post position-relative">
+                                       <a href="#"><img src="{% static 'images/page-img/06.jpg' %}" alt="gallary-image" class="img-fluid rounded"></a>
+                                       <div class="job-icon-position">
+                                          <div class="job-icon bg-primary p-2 d-inline-block rounded-circle"><i class="ri-briefcase-line text-white"></i></div>
+                                       </div>
+                                       <div class="card-body text-center p-2">
+                                          <h5>Freelance Photographer</h5>
+                                          <p class="mb-0">January 24, 2019</p>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>-->
+                        <div class="card">
+                           <div class="card-header d-flex justify-content-between">
+                              <div class="header-title">
+                                 <h4 class="card-title">Photos</h4>
+                              </div>
+                              <div class="card-header-toolbar d-flex align-items-center">
+                                 <!-- <p class="m-0"><a href="javacsript:void();">Add Photo </a></p> -->
+                              </div>
+                           </div>
+                           <div class="card-body">
+                              <ul class="profile-img-gallary p-0 m-0 list-unstyled" id="sidebar-photos-block">
+                                 <!-- AJAX Goes Here -->
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="card">
+                           <div class="card-header d-flex justify-content-between">
+                              <div class="header-title">
+                                 <h4 class="card-title">Friends</h4>
+                              </div>
+                              <div class="card-header-toolbar d-flex align-items-center">
+                                 <p class="m-0">{{current_user.get_friends_count}} Friends</p>
+                              </div>
+                           </div>
+                           <div class="card-body">
+                              <ul class="profile-img-gallary p-0 m-0 list-unstyled" id="friend-list-box">
+                                 <!-- AJAX Goes Here -->
+                              </ul>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- Include theapp/components/feed.html -->
+                     {% include "theapp/components/feed.html" %}
+                  </div>
+               </div>
+            </div>
+            <div class="tab-pane fade" id="about" role="tabpanel">
+               <div class="card">
+                  <div class="card-body">
+                     <div class="row">
+                        <!-- <div class="col-md-3">
+                           <ul class="nav nav-pills basic-info-items list-inline d-block p-0 m-0">
+                              <li>
+                                 <a class="nav-link active" href="#v-pills-basicinfo-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-basicinfo-tab" role="button">Contact and Basic Info</a>
+                              </li>
+                              <li>
+                                 <a class="nav-link" href="#v-pills-family-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-family" role="button">Family and Relationship</a>
+                              </li>
+                              <li>
+                                 <a class="nav-link" href="#v-pills-work-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-work-tab" role="button">Work and Education</a>
+                              </li>
+                              <li>
+                                 <a class="nav-link" href="#v-pills-lived-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-lived-tab" role="button">Places You've Lived</a>
+                              </li>
+                              <li>
+                                 <a class="nav-link" href="#v-pills-details-tab" data-bs-toggle="pill"
+                                    data-bs-target="#v-pills-details-tab" role="button">Details About You</a>
+                              </li>
+                           </ul>
+                        </div> -->
+                        <div class="col-md-12 ps-4">
+                           <div class="tab-content">
+                              <div class="tab-pane fade active show" id="v-pills-basicinfo-tab" role="tabpanel"
+                                 aria-labelledby="v-pills-basicinfo-tab">
+
+                                 <h4>Contact Information</h4>
+                                 <hr>
+                                 <div class="row">
+
+                                    <div class="col-3">
+                                       <h6>Email</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.email}}</p>
+                                    </div>
+                                    <div class="col-3">
+                                       <h6>Country</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.country}}</p>
+                                    </div>
+                                 </div>
+
+                                 <h4 class="mt-3">Basic Information</h4>
+                                 <hr>
+                                 <div class="row">
+
+                                    <div class="col-3">
+                                       <h6>Handle</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.handle}}</p>
+                                    </div>
+                                    <div class="col-3">
+                                       <h6>Birthday</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.birth_day|date:'Y-m-d'}}</p>
+                                    </div>
+                                    <div class="col-3">
+                                       <h6>Bio</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.bio}}</p>
+                                    </div>
+
+                                 </div>
+
+
+
+                                 <h4 class="mt-3">Post Information</h4>
+                                 <hr>
+                                 <div class="row">
+
+                                    <div class="col-3">
+                                       <h6>Friends</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.get_friends_count}}</p>
+                                    </div>
+                                    <div class="col-3">
+                                       <h6>Posts</h6>
+                                    </div>
+                                    <div class="col-9">
+                                       <p class="mb-0">{{current_user.get_posts_count}}</p>
+                                    </div>
+
+                                 </div>
+
+                              </div>
+                              <!-- <div class="tab-pane fade" id="v-pills-family" role="tabpanel">
+                                 <h4 class="mb-3">Relationship</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="media-support-info ms-3">
+                                          <h6>Add Your Relationship Status</h6>
+                                       </div>
+                                    </li>
+                                 </ul>
+                                 <h4 class="mt-3 mb-3">Family Members</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="media-support-info ms-3">
+                                          <h6>Add Family Members</h6>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/01.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Paul Molive</h6>
+                                                <p class="mb-0">Brothe</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex justify-content-between mb-4  align-items-center">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/02.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class=" ms-3">
+                                                <h6>Anna Mull</h6>
+                                                <p class="mb-0">Sister</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/03.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Paige Turner</h6>
+                                                <p class="mb-0">Cousin</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <div class="tab-pane fade" id="v-pills-work-tab" role="tabpanel"
+                                 aria-labelledby="v-pills-work-tab">
+                                 <h4 class="mb-3">Work</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex justify-content-between mb-4  align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="ms-3">
+                                          <h6>Add Work Place</h6>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/01.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Themeforest</h6>
+                                                <p class="mb-0">Web Designer</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/02.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>iqonicdesign</h6>
+                                                <p class="mb-0">Web Developer</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/03.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>W3school</h6>
+                                                <p class="mb-0">Designer</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                                 <h4 class="mb-3">Professional Skills</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="ms-3">
+                                          <h6>Add Professional Skills</h6>
+                                       </div>
+                                    </li>
+                                 </ul>
+                                 <h4 class="mt-3 mb-3">College</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="ms-3">
+                                          <h6>Add College</h6>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/01.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Lorem ipsum</h6>
+                                                <p class="mb-0">USA</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <div class="tab-pane fade" id="v-pills-lived-tab" role="tabpanel"
+                                 aria-labelledby="v-pills-lived-tab">
+                                 <h4 class="mb-3">Current City and Hometown</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/01.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Georgia</h6>
+                                                <p class="mb-0">Georgia State</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                    <li class="d-flex mb-4 align-items-center justify-content-between">
+                                       <div class="user-img img-fluid"><img src="{% static 'images/user/02.jpg' %}"
+                                             alt="story-img" class="rounded-circle avatar-40"></div>
+                                       <div class="w-100">
+                                          <div class="d-flex flex-wrap justify-content-between">
+                                             <div class="ms-3">
+                                                <h6>Atlanta</h6>
+                                                <p class="mb-0">Atlanta City</p>
+                                             </div>
+                                             <div class="edit-relation"><a href="#"><i
+                                                      class="ri-edit-line me-2"></i>Edit</a></div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                                 <h4 class="mt-3 mb-3">Other Places Lived</h4>
+                                 <ul class="suggestions-lists m-0 p-0">
+                                    <li class="d-flex mb-4 align-items-center">
+                                       <div class="user-img img-fluid"><i class="ri-add-fill"></i></div>
+                                       <div class="ms-3">
+                                          <h6>Add Place</h6>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                              <div class="tab-pane fade" id="v-pills-details-tab" role="tabpanel"
+                                 aria-labelledby="v-pills-details-tab">
+                                 <h4 class="mb-3">About You</h4>
+                                 <p>Hi, I’m Bni, I’m 26 and I work as a Web Designer for the iqonicdesign.</p>
+                                 <h4 class="mt-3 mb-3">Other Name</h4>
+                                 <p>Bini Rock</p>
+                                 <h4 class="mt-3 mb-3">Favorite Quotes</h4>
+                                 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+                                    Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+                              </div> -->
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="tab-pane fade" id="friends" role="tabpanel">
+               <div class="card">
+                  <div class="card-body">
+                     <h2>Friends</h2>
+                     <div class="friend-list-tab mt-2">
+                        <ul
+                           class="nav nav-pills d-flex align-items-center justify-content-left friend-list-items p-0 mb-2">
+                           <li>
+                              <p class="nav-link active">{{current_user.get_friends_count}} Friends</p>
+                           </li>
+                           <!--
+                           <li>
+                              <a class="nav-link" data-bs-toggle="pill" href="#pill-recently-add"
+                                 data-bs-target="#recently-add">Recently Added</a>
+                           </li>
+                           <li>
+                              <a class="nav-link" data-bs-toggle="pill" href="#pill-following"
+                                 data-bs-target="#following">Following</a>
+                           </li> -->
+                        </ul>
+                        <div class="tab-content">
+                           <div class="tab-pane fade active show" id="all-friends" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="row" id="friend-list-tab-box">
+                                    <!-- AJAX Goes Here-->
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="tab-pane fade" id="recently-add" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="row">
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/07.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Otto Matic</h5>
+                                                   <p class="mb-0">4 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton31" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton31">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/08.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Moe Fugga</h5>
+                                                   <p class="mb-0">16 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton32" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton32">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/09.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Tom Foolery</h5>
+                                                   <p class="mb-0">14 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton33" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton33">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/10.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Bud Wiser</h5>
+                                                   <p class="mb-0">16 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton34" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton34">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/15.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Polly Tech</h5>
+                                                   <p class="mb-0">10 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton35" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton35">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/16.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Holly Graham</h5>
+                                                   <p class="mb-0">8 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton36" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton36">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/17.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Tara Zona</h5>
+                                                   <p class="mb-0">5 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton37" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton37">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/18.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Barry Cade</h5>
+                                                   <p class="mb-0">20 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton38" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton38">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="tab-pane fade" id="closefriends" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="row">
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/19.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Bud Wiser</h5>
+                                                   <p class="mb-0">32 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton39" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton39">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/05.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Otto Matic</h5>
+                                                   <p class="mb-0">9 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton40" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton40">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/06.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Peter Pants</h5>
+                                                   <p class="mb-0">2 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton41" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton41">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/07.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Zack Lee</h5>
+                                                   <p class="mb-0">15 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton42" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton42">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/08.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Barry Wine</h5>
+                                                   <p class="mb-0">36 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton43" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton43">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/09.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Robin Banks</h5>
+                                                   <p class="mb-0">22 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton44" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton44">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/10.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Cory Ander</h5>
+                                                   <p class="mb-0">18 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton45" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton45">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/15.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Moe Fugga</h5>
+                                                   <p class="mb-0">12 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton46" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton46">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/16.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Polly Tech</h5>
+                                                   <p class="mb-0">30 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton47" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton47">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/17.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Hal Appeno</h5>
+                                                   <p class="mb-0">25 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton48" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton48">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="tab-pane fade" id="home-town" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="row">
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/18.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Paul Molive</h5>
+                                                   <p class="mb-0">14 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton49" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton49">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/19.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Paige Turner</h5>
+                                                   <p class="mb-0">8 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton50" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton50">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/05.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Barb Ackue</h5>
+                                                   <p class="mb-0">23 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton51" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton51">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/06.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Ira Membrit</h5>
+                                                   <p class="mb-0">16 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton52" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton52">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/07.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Maya Didas</h5>
+                                                   <p class="mb-0">12 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton53" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton53">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="tab-pane fade" id="following" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="row">
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/05.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Maya Didas</h5>
+                                                   <p class="mb-0">20 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton54" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton54">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/06.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Monty Carlo</h5>
+                                                   <p class="mb-0">3 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton55" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton55">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/07.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Cliff Hanger</h5>
+                                                   <p class="mb-0">20 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton56" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton56">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/08.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>b Ackue</h5>
+                                                   <p class="mb-0">12 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton57" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton57">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/09.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Bob Frapples</h5>
+                                                   <p class="mb-0">12 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton58" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton58">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/10.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Anna Mull</h5>
+                                                   <p class="mb-0">6 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton59" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton59">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/15.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>ry Wine</h5>
+                                                   <p class="mb-0">15 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton60" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton60">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/16.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Don Stairs</h5>
+                                                   <p class="mb-0">12 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton61" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton61">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/17.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Peter Pants</h5>
+                                                   <p class="mb-0">8 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton62" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton62">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/18.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Polly Tech</h5>
+                                                   <p class="mb-0">18 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton63" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton63">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/19.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Tara Zona</h5>
+                                                   <p class="mb-0">30 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton64" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton64">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/05.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Arty Ficial</h5>
+                                                   <p class="mb-0">15 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton65" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton65">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/06.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Bill Emia</h5>
+                                                   <p class="mb-0">25 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton66" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton66">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/07.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Bill Yerds</h5>
+                                                   <p class="mb-0">9 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton67" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton67">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 mb-3">
+                                       <div class="iq-friendlist-block">
+                                          <div class="d-flex align-items-center justify-content-between">
+                                             <div class="d-flex align-items-center">
+                                                <a href="#">
+                                                   <img src="{% static 'images/user/08.jpg' %}" alt="profile-img"
+                                                      class="img-fluid">
+                                                </a>
+                                                <div class="friend-info ms-3">
+                                                   <h5>Matt Innae</h5>
+                                                   <p class="mb-0">19 friends</p>
+                                                </div>
+                                             </div>
+                                             <div class="card-header-toolbar d-flex align-items-center">
+                                                <div class="dropdown">
+                                                   <span class="dropdown-toggle btn btn-secondary me-2"
+                                                      id="dropdownMenuButton68" data-bs-toggle="dropdown"
+                                                      aria-expanded="true" role="button">
+                                                      <i class="ri-check-line me-1 text-white"></i> Friend
+                                                   </span>
+                                                   <div class="dropdown-menu dropdown-menu-right"
+                                                      aria-labelledby="dropdownMenuButton68">
+                                                      <a class="dropdown-item" href="#">Get Notification</a>
+                                                      <a class="dropdown-item" href="#">Close Friend</a>
+                                                      <a class="dropdown-item" href="#">Unfollow</a>
+                                                      <a class="dropdown-item" href="#">Unfriend</a>
+                                                      <a class="dropdown-item" href="#">Block</a>
+                                                   </div>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="tab-pane fade" id="photos" role="tabpanel">
+               <div class="card">
+                  <div class="card-body">
+                     <h2>Photos</h2>
+                     <div class="friend-list-tab mt-2">
+                        <ul
+                           class="nav nav-pills d-flex align-items-center justify-content-left friend-list-items p-0 mb-2">
+                           <!-- <li>
+                              <a class="nav-link active" data-bs-toggle="pill" href="#pill-photosofyou"
+                                 data-bs-target="#photosofyou">Photos of You</a>
+                           </li> -->
+                           <!-- <li>
+                              <a class="nav-link" data-bs-toggle="pill" href="#pill-your-photos"
+                                 data-bs-target="#your-photos">Your Photos</a>
+                           </li> -->
+                        </ul>
+                        <div class="tab-content">
+                           <div class="tab-pane fade active show" id="photosofyou" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="d-grid gap-2 d-grid-template-1fr-13" id="main-photos-block">
+                                    <!-- AJAX Goes Here -->
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- <div class="tab-pane fade" id="your-photos" role="tabpanel">
+                              <div class="card-body p-0">
+                                 <div class="d-grid gap-2 d-grid-template-1fr-13 ">
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/51.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/52.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/53.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/54.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/55.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/56.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/57.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/58.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/59.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                    <div class="">
+                                       <div class="user-images position-relative overflow-hidden">
+                                          <a href="#">
+                                             <img src="{% static 'images/page-img/60.jpg' %}" class="img-fluid rounded"
+                                                alt="Responsive image">
+                                          </a>
+                                          <div class="image-hover-data">
+                                             <div class="product-elements-icon">
+                                                <ul class="d-flex align-items-center m-0 p-0 list-inline">
+                                                   <li><a href="#" class="pe-3 text-white"> 60 <i
+                                                            class="ri-thumb-up-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 30 <i
+                                                            class="ri-chat-3-line"></i> </a></li>
+                                                   <li><a href="#" class="pe-3 text-white"> 10 <i
+                                                            class="ri-share-forward-line"></i> </a></li>
+                                                </ul>
+                                             </div>
+                                          </div>
+                                          <a href="#" class="image-edit-btn" data-bs-toggle="tooltip"
+                                             data-bs-placement="top" title="" data-bs-original-title="Edit or Remove"><i
+                                                class="ri-edit-2-fill"></i></a>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div> -->
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- <div class="col-sm-12 text-center">
+         <img src="{% static 'images/page-img/page-load-loader.gif" alt="loader" style="height: 100px;">
+      </div> -->
+   </div>
+</div>
+
+<!-- Include theapp/components/modals.html-->
+{% include "theapp/components/modals.html" %}
+
+
+
+
+<!-- Header Photo Update Modal -->
+<div class="modal fade" id="header-photo-update-modal" tabindex="-1" aria-labelledby="header-photo-update-modalLabel"
+   aria-hidden="true">
+   <div class="modal-dialog   modal-fullscreen-sm-down">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="header-photo-update-modalLabel">Update Your Profile Header Photo</h5>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i
+                  class="ri-close-fill"></i></button>
+         </div>
+         <div class="modal-body">
+            <h4 class="text-center">Time for a change? <br> Update your header photo!</h4>
+            <div class="row mt-2">
+               <div class="col-md-12 text-center">
+                  <form id="header-photo-form">
+                     <input id="header-photo-input" class="form-control rounded" type="file"
+                        accept="image/jpeg, image/png, image/jpg">
+                     <button class="btn btn-primary d-block w-100 mt-3" type="submit">Save</button>
+                  </form>
+               </div>
+            </div>
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script src="{% static 'js/custom/feed.js' %}"></script>
+<script src="{% static 'js/custom/create-poll.js' %}"></script>
+<script src="{% static 'js/custom/alert.js' %}"></script>
+<!-- Emoji Picker -->
+<!-- https://github.com/woody180/vanilla-javascript-emoji-picker -->
+<script src="{% static 'js/vendor/vanillaEmojiPicker.js' %}"></script>
+
+<!-- For now, hide the ability to post on another users page -->
+{% if current_user == user %}
+{% else %}
+<script>
+   var postToFeed = document.getElementById('post-modal-data')
+   postToFeed.remove()
+</script>
+{% endif %}
+
+<script>
+   new EmojiPicker({
+      trigger: [
+         {
+            selector: '.emoji-btn',
+            insertInto: '#create-post-input'
+         }
+      ],
+      closeButton: true,
+      //specialButtons: green
+   });
+</script>
+
+<script>
+   // Send the current users Id to validate each of these AJAX calls
+   var currentUserId = location.pathname.split('/')[2];
+   var profileHeaderPhoto = document.getElementById('profile-header-photo')
+   const getHeaderPhoto = () => {
+      $.ajax({
+         type: 'POST',
+         data: {
+            'csrfmiddlewaretoken': csrftoken,
+            'current_user_id': currentUserId,
+         },
+         url: '/profile-header-photo-ajax/',
+         success: function (response) {
+            const data = response.data
+            if (data) {
+               profileHeaderPhoto.src = '/media/' + data
+            } else {
+               profileHeaderPhoto.src = '/media/' + profile - bg5.jpg
+            }
+         },
+         error: function (error) {
+            console.log('error', error)
+         }
+      }) // end ajax
+   }; // End get header function
+
+   getHeaderPhoto();
+
+
+
+   // Update header photo
+   const updateHeaderPhotoForm = document.getElementById('header-photo-form')
+   const updateHeaderPhotoInput = document.getElementById('header-photo-input')
+   updateHeaderPhotoForm.addEventListener('submit', e => {
+      e.preventDefault()
+      // use FormData so that we can upload images along with data
+      // https://roytuts.com/how-to-upload-files-using-django-jquery-and-ajax/
+      var form_data = new FormData();
+      form_data.append('header-photo-file', updateHeaderPhotoInput.files[0]);
+      form_data.append('csrfmiddlewaretoken', csrftoken);
+      form_data.append('current_user_id', currentUserId);
+      $.ajax({
+         url: '/update-header-photo-ajax/',
+         dataType: 'json',
+         cache: false,
+         contentType: false,
+         processData: false,
+         data: form_data,
+         type: 'post',
+         success: function (response) {
+            getHeaderPhoto();
+            $('#header-photo-update-modal').modal('toggle');
+         },
+         error: function (response) {
+            // console.log(error)
+         }
+      });
+   }); // End Update Header Photo Form Event Listener
+
+   // Get friend list (sidebar)
+   var friendsListBox = document.getElementById('friend-list-box')
+   $.ajax({
+      type: 'POST',
+      data: {
+         'csrfmiddlewaretoken': csrftoken,
+         'current_user_id': currentUserId,
+      },
+      url: '/get-my-friend-list-ajax/',
+      success: function (response) {
+         const data = response.data
+         if (data.length > 0) {
+            data.forEach(el => {
+               friendsListBox.innerHTML += `
+            <li class="">
+               <a href="/user-profile/${el.friend_id}">
+               <img src="/media/${el.friend_profile_photo}" alt="gallary-image" class="img-fluid" /></a>
+               <h6 class="mt-2 text-center">${el.friend_handle}</h6>
+            </li>
+         `
+            })
+         } else {
+            friendsListBox.innerHTML += 'This User Hasn\'t Added Any Friends'
+         }
+      },
+      error: function (error) {
+         console.log('error', error)
+      }
+   }) // end ajax
+
+
+   // Send friend request button
+   try {
+      var friendRequestButton = document.getElementById('send-friend-request')
+      friendRequestButton.addEventListener('click', () => {
+         $.ajax({
+            type: 'POST',
+            url: '/send-friend-request-ajax/',
+            data: {
+               'csrfmiddlewaretoken': csrftoken,
+               'user_id': currentUserId,
+            },
+            success: function (response) {
+               window.location.reload();
+            },
+            error: function (error) {
+               // console.log(error)
+            }
+         }) // End AJAX
+      })
+   } catch (error) {
+
+   }
+
+   // See if friend request is pending, update button if so
+   $.ajax({
+      type: 'POST',
+      url: '/friend-request-pending-ajax/',
+      data: {
+         'csrfmiddlewaretoken': csrftoken,
+         'user_id': currentUserId,
+      },
+      success: function (response) {
+         request_is_pending = response.request_is_pending
+         if (request_is_pending == true) {
+            try {
+               friendRequestButton.innerHTML = 'Friend Request Sent'
+               friendRequestButton.classList.remove('btn-primary')
+               friendRequestButton.classList.add('btn-success')
+               friendRequestButton.classList.add('disabled')
+               friendRequestButton.id = ''
+            } catch (error) {
+            }
+         }
+      },
+      error: function (error) {
+         console.log('error', error)
+      }
+   })
+
+   // Sidebar photos / Tab photos (source from posts)
+   var sidebarPhotosBlock = document.getElementById('sidebar-photos-block')
+   $.ajax({
+      type: 'POST',
+      url: '/get-profile-photos-ajax/',
+      data: {
+         'csrfmiddlewaretoken': csrftoken,
+         'user_id': currentUserId,
+         'location': 'Sidebar',
+      },
+      success: function (response) {
+         photos = response.photos
+         if (photos.length > 0) {
+            sidebarPhotosBlock.innerHTML = ''
+            photos.forEach(el => {
+               sidebarPhotosBlock.innerHTML += `
+            <li class="">
+               <a href="#">
+                  <img src="/media/${el.photo}" alt="post-image" class="img-fluid"/>
+               </a>
+            </li>
+            `
+            });
+         } else {
+            sidebarPhotosBlock.innerHTML = 'No photos have been posted yet!'
+         }
+      },
+      error: function (error) {
+         console.log('error', error)
+      }
+   })
+
+
+   // Main photos inside "Photos" tab
+   var mainPhotosBlock = document.getElementById('main-photos-block')
+   $.ajax({
+      type: 'POST',
+      url: '/get-profile-photos-ajax/',
+      data: {
+         'csrfmiddlewaretoken': csrftoken,
+         'user_id': currentUserId,
+         'location': 'Main',
+      },
+      success: function (response) {
+         photos = response.photos
+         if (photos.length > 0) {
+            mainPhotosBlock.innerHTML = ''
+            photos.forEach(el => {
+               mainPhotosBlock.innerHTML += `
+            <div class="">
+               <div class="user-images position-relative overflow-hidden">
+                     <img src="/media/${el.photo}" class="img-fluid rounded"
+                        alt="Responsive image">
+               </div>
+            </div>
+            `
+            });
+         } else {
+            mainPhotosBlock.innerHTML = 'No photos have been posted yet!'
+         }
+      },
+      error: function (error) {
+         console.log('error', error)
+      }
+   })
+
+   // Friends list inside "Friends" tab
+   var friendList = document.getElementById('friend-list-tab-box')
+   const getFriendList = () => {
+      $.ajax({
+         type: 'GET',
+         url: '/get-my-friend-list-ajax/',
+         success: function (response) {
+            const data = response.data
+            if (data.length > 0) {
+               data.forEach(el => {
+                  friendList.innerHTML += `
+                    <div class="col-md-6">
+                            <div class="card card-block card-stretch card-height">
+                                <div class="card-body profile-page p-0">
+                                    <div class="profile-header-image">
+                                        <div class="cover-container">
+                                            <img src="/media/${el.friend_header_photo}" alt="profile-bg" class="rounded img-fluid w-100">
+                                        </div>
+                                        <div class="profile-info p-4">
+                                            <div class="user-detail">
+                                            <div class="d-flex flex-wrap justify-content-between align-items-start">
+                                                <div class="profile-detail d-flex">
+                                                    <div class="profile-img pe-4">
+                                                        <img src="/media/${el.friend_profile_photo}" alt="profile-img" class="avatar-130 img-fluid" />
+                                                    </div>
+                                                    <div class="user-data-block">
+                                                        <h4>
+                                                            <a href="/user-profile/${el.friend_id}">${el.friend_handle}</a>
+                                                        </h4>
+                                                        <h6>${el.friend_country}</h6>
+                                                        <p>${el.friend_bio}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <!--${el.friend_following ? `<a href="#" class="btn btn-primary">Following</a>` : `<a href="#" class="btn btn-light">Follow</a>`}-->
+                                            <a href="/unfriend-user/${el.friend_id}" class="btn btn-outline-dark"><i class="ri-close-circle-line"></i> Unfriend</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+               })
+            } else {
+               friendList.innerHTML = `
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <div class="card card-block card-stretch card-height p-5">
+                                        <div class="card-body profile-page p-0">
+                                            <h4>You don't have any friends yet!</h4>
+                                            <a href="/users" class="mt-3 btn btn-primary">Find some now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+            }
+         },
+         error: function (error) {
+            console.log('error', error)
+         }
+      }) // end ajax
+   }; // End get friend list function
+
+   getFriendList();
+
+</script>
+
+{% endblock content %}

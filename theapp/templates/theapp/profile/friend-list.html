@@ -1,0 +1,111 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Friend List {% endblock title %}
+{% block content %}
+
+{% if alert %}
+<div class="row">
+    <div class="col-md-12">
+        <div id="alert" class="alert-warning p-2 pt-4 mb-3">
+            <p class="text-center">{{ alert }}</p>
+        </div>
+    </div>
+</div>
+<script>
+    const alertBox = document.getElementById('alert')
+    function hideAlert() {
+        alertBox.remove()
+    }
+    setTimeout(hideAlert, 6000)
+</script>
+{% endif %}
+
+
+
+<div class="container">
+    <div class="row" id="friend-list">
+        <!-- AJAX Goes Here -->
+    </div>
+</div>
+
+
+
+<script>
+    var friendList = document.getElementById('friend-list')
+    const getFriendList = () => {
+        $.ajax({
+            type: 'GET',
+            url: '/get-my-friend-list-ajax/',
+            success: function (response) {
+                const data = response.data
+                if (data.length > 0) {
+                    data.forEach(el => {
+                        friendList.innerHTML += `
+                    <div class="col-md-6">
+                            <div class="card card-block card-stretch card-height">
+                                <div class="card-body profile-page p-0">
+                                    <div class="profile-header-image">
+                                        <div class="cover-container">
+                                            <img src="/media/${el.friend_header_photo}" alt="profile-bg" class="rounded img-fluid w-100">
+                                        </div>
+                                        <div class="profile-info p-4">
+                                            <div class="user-detail">
+                                            <div class="d-flex flex-wrap justify-content-between align-items-start">
+                                                <div class="profile-detail d-flex">
+                                                    <div class="profile-img pe-4">
+                                                        <img src="/media/${el.friend_profile_photo}" alt="profile-img" class="avatar-130 img-fluid" />
+                                                    </div>
+                                                    <div class="user-data-block">
+                                                        <h4>
+                                                            <a href="/user-profile/${el.friend_id}">${el.friend_handle}</a>
+                                                        </h4>
+                                                        <h6>${el.friend_country}</h6>
+                                                        <p>${el.friend_bio}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <!--${el.friend_following ? `<a href="#" class="btn btn-primary">Following</a>` : `<a href="#" class="btn btn-light">Follow</a>`}-->
+                                            <a href="/unfriend-user/${el.friend_id}" class="btn btn-outline-dark"><i class="ri-close-circle-line"></i> Unfriend</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                    })
+                } else {
+                    friendList.innerHTML = `
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <div class="card card-block card-stretch card-height p-5">
+                                        <div class="card-body profile-page p-0">
+                                            <h4>You don't have any friends yet!</h4>
+                                            <a href="/users" class="mt-3 btn btn-primary">Find some now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            },
+            error: function (error) {
+                console.log('error', error)
+            }
+        }) // end ajax
+    }; // End get friend list function
+
+    getFriendList();
+</script>
+
+
+
+{% endblock content %}

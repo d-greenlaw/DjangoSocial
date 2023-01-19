@@ -1,0 +1,74 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | My Feed {% endblock title %}
+{% block content %}
+
+<div id="alert"></div>
+
+<div class="container">
+   <div class="row">
+      {% include "theapp/components/feed.html" %}
+      <div class="col-lg-4">
+         <div class="card" id="people-you-may-know-card">
+            <div class="card-header d-flex justify-content-between">
+               <div class="header-title">
+                  <h4 class="card-title">People You May Know</h4>
+               </div>
+            </div>
+            <div class="card-body">
+               <ul class="media-story list-inline m-0 p-0" id="people-you-may-know-box">
+                  <!-- AJAX Goes Here-->
+               </ul>
+            </div>
+         </div>
+         <div class="card" id="events-card">
+            <div class="card-header d-flex justify-content-between">
+               <div class="header-title">
+                  <h4 class="card-title">Events</h4>
+               </div>
+            </div>
+            <div class="card-body">
+               <ul class="media-story list-inline m-0 p-0" id="recent-events-box">
+                  <!-- AJAX Goes Here -->
+               </ul>
+            </div>
+         </div>
+         <div class="card" id="upcoming-birthday-card">
+            <div class="card-header d-flex justify-content-between">
+               <div class="header-title">
+                  <h4 class="card-title">Upcoming Birthdays</h4>
+               </div>
+            </div>
+            <div class="card-body">
+               <ul class="media-story list-inline m-0 p-0" id="upcoming-birthday-box">
+                  <!-- AJAX Goes Here -->
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{% include "theapp/components/modals.html" %}
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script src="{% static 'js/custom/feed.js' %}"></script>
+<script src="{% static 'js/custom/create-poll.js' %}"></script>
+<script src="{% static 'js/custom/alert.js' %}"></script>
+<!-- Emoji Picker -->
+<!-- https://github.com/woody180/vanilla-javascript-emoji-picker -->
+<script src="{% static 'js/vendor/vanillaEmojiPicker.js' %}"></script>
+<script>
+   new EmojiPicker({
+      trigger: [
+         {
+            selector: '.emoji-btn',
+            insertInto: '#create-post-input'
+         }
+      ],
+      closeButton: true,
+      //specialButtons: green
+   });
+</script>
+
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | Post Details {% endblock title %}
+{% block content %}
+
+<div id="alert"></div>
+
+<div class="container">
+    <div class="row">
+        <!-- Include theapp/components/feed.html -->
+        {% include "theapp/components/feed.html" %}
+    </div>
+</div>
+
+<!-- Include theapp/components/modals.html-->
+{% include "theapp/components/modals.html" %}
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script src="{% static 'js/custom/feed.js' %}"></script>
+<script src="{% static 'js/custom/create-poll.js' %}"></script>
+<script src="{% static 'js/custom/alert.js' %}"></script>
+<!-- Emoji Picker -->
+<!-- https://github.com/woody180/vanilla-javascript-emoji-picker -->
+<script src="{% static 'js/vendor/vanillaEmojiPicker.js' %}"></script>
+<script>
+    new EmojiPicker({
+        trigger: [
+            {
+                selector: '.emoji-btn',
+                insertInto: '#create-post-input'
+            }
+        ],
+        closeButton: true,
+        //specialButtons: green
+    });
+</script>
+
+{% endblock content %}

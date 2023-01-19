@@ -1,0 +1,116 @@
+{% extends 'theapp/base.html' %}
+{% load static %}
+{% block title %} DjangoSocial | All Users {% endblock title %}
+{% block content %}
+
+<div class="row" id="alert-box">
+    <!-- AJAX Goes Here -->
+</div>
+
+<div class="container">
+    <div class="row" id="user-block">
+        <!-- AJAX Goes Here -->
+    </div>
+</div>
+
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script>
+    var userBlock = document.getElementById('user-block')
+    var alertBox = document.getElementById('alert-box')
+
+    function getAllUsers() {
+        $.ajax({
+            type: 'GET',
+            url: '/users-ajax/',
+            success: function (response) {
+                const data = response.data
+                userBlock.innerHTML = ''
+                data.forEach(el => {
+                    userBlock.innerHTML += `
+            <div class="col-md-6">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-body profile-page p-0">
+                        <div class="profile-header-image">
+                            <div class="cover-container">
+                                <img src="/media/${el.user_header_photo}" alt="profile-bg" class="rounded img-fluid w-100">
+                            </div>
+                            <div class="profile-info p-4">
+                                <div class="user-detail">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-start">
+                                        <div class="profile-detail d-flex">
+                                            <div class="profile-img pe-4">
+                                                <img src="/media/${el.user_profile_photo}" alt="profile-img" class="avatar-130 img-fluid" />
+                                            </div>
+                                            <div class="user-data-block">
+                                                <h4>
+                                                    <a href="/user-profile/${el.user_id}">${el.user_handle}</a>
+                                                </h4>
+                                                <h6>${el.user_country}</h6>
+                                                <p>${el.user_bio}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            ${el.already_friends ? `<p class="text-success"><i class="ri-check-line"></i> Already Friends</p>` : `<p id="send-${el.user_id}" class="btn btn-sm btn-outline-dark" onclick="sendFriendRequest(${el.user_id})">Send Friend Request</p>`}
+                                            ${el.request_pending ? `<p id="sent-${el.user_id}" class="text-success"><i class="ri-check-line"></i> Sent Friend Request</p>` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `
+                    try {
+                        if (document.getElementById(`sent-${el.user_id}`)) {
+                            document.getElementById(`send-${el.user_id}`).remove()
+                        }
+                    } catch (error) {
+
+                    }
+                });
+            },
+            error: function (error) {
+                console.log('error', error)
+            }
+        })
+    }
+
+    getAllUsers()
+
+    function sendFriendRequest(userId) {
+        $.ajax({
+            type: 'POST',
+            data: {
+                'csrfmiddlewaretoken': csrftoken,
+                'user_id': userId,
+            },
+            url: '/send-friend-request-ajax/',
+            success: function (response) {
+                const alert = response.alert
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                alertBox.innerHTML = `
+            <div class="col-md-12">
+                <div class="alert-warning p-2 pt-4 mb-3">
+                    <p class="text-center">${alert}</p>
+                </div>
+            </div>
+        `
+                function hideAlert() {
+                    alertBox.remove()
+                }
+                setTimeout(hideAlert, 6000)
+
+                getAllUsers() // Reload the users
+            },
+            error: function (error) {
+                console.log('error', error)
+            }
+        })
+    }
+
+
+</script>
+{% endblock content %}

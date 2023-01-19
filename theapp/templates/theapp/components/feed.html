@@ -1,0 +1,80 @@
+{% load static %}
+<div class="col-lg-8 row m-0 p-0">
+   <div class="col-sm-12">
+      <div id="post-modal-data" class="card card-block card-stretch card-height">
+         <div class="card-header d-flex justify-content-between">
+            <div class="header-title">
+               <h4 class="card-title">Create Post</h4>
+            </div>
+         </div>
+         <div class="card-body">
+            <div class="d-flex align-items-center">
+               <div class="user-img">
+                  <img src="/media/{{user.profile_photo}}" alt="userimg" class="avatar-60 rounded-circle">
+               </div>
+               <form data-bs-toggle="modal" data-bs-target="#post-modal" class="post-text ms-3 w-100"
+                  action="javascript:void();">
+                  <input id="delete-this-value-just-in-case" type="text" class="form-control rounded"
+                     placeholder="Write something here..." style="border:none;">
+               </form>
+            </div>
+            <hr>
+            <!-- New Post Modal -->
+            <ul class=" post-opt-block d-flex list-inline m-0 p-0 flex-wrap">
+               <li class="me-3 mb-md-0 mb-2">
+                  <a href="#" class="btn btn-soft-primary" data-bs-toggle="modal" data-bs-target="#post-modal">
+                     <img src="{% static 'images/small/07.png' %}" alt="icon" class="img-fluid me-2"> Photo
+                  </a>
+               </li>
+               <!-- New Poll Modal -->
+               <li class="me-3 mb-md-0 mb-2">
+                  <a href="#" class="btn btn-soft-primary" onclick="createPoll()">
+                     <img src="{% static 'images/small/08.png' %}" alt="icon" class="img-fluid me-2"> Poll
+                  </a>
+               </li>
+               <!-- New Post Modal -->
+               <li class="me-3">
+                  <a href="#" class="btn btn-soft-primary" data-bs-toggle="modal" data-bs-target="#post-modal">
+                     <img src="{% static 'images/small/09.png' %}" alt="icon" class="img-fluid me-2"> Feeling
+                  </a>
+               </li>
+               <!-- New Post Modal -->
+               <li class="me-3">
+                  <a href="#" class="btn btn-soft-primary" data-bs-toggle="modal" data-bs-target="#post-modal">
+                     <img src="{% static 'images/small/10.png' %}" alt="icon" class="img-fluid me-2"> Gif
+                  </a>
+               </li>
+               <!-- New Event Modal-->
+               <li class="me-3">
+                  <a href="#" class="btn btn-soft-primary" data-bs-toggle="modal" data-bs-target="#new-event-modal">
+                     <img src="{% static 'images/small/11.png' %}" alt="icon" class="img-fluid me-2"> Event
+                  </a>
+               </li>
+            </ul>
+         </div>
+      </div>
+
+      <!-- Loading spinner -->
+      <div class="row">
+         <div class="col-md-12 text-center">
+            <div id="feed-spinner" class="spinner-border text-primary" role="status">
+               <span class="sr-only">Loading...</span>
+            </div>
+         </div>
+      </div>
+      <!-- End loading spinner -->
+
+   </div>
+
+   <div id="post-box">
+      <!-- AJAX goes here -->
+   </div>
+
+
+   <div class="row" style="margin-bottom:8%;">
+      <div class="col-md-12 text-center">
+         <span id="no-more-posts"></span>
+      </div>
+   </div>
+
+</div>

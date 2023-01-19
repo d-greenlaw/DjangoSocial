@@ -1,0 +1,142 @@
+{% load static %}
+<script src="{% static 'js/custom/common/csrf.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    var calendar = $('#calendar').fullCalendar({
+      header: {
+        left: 'title',
+        right: 'prev,next'
+      },
+      events: '/all-events',
+      selectable: true,
+      selectHelper: true,
+      editable: true,
+      eventStartEditable: false, // Removes draggable
+      eventLimit: false, // Truncates events in month view
+      dayNamesShort: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      select: function (start, end, allDay) {
+        $("#create-event-modal").modal("toggle");
+        const newEventType = document.getElementById('newEventType')
+        const newEventName = document.getElementById('newEventName')
+        const newEventNotes = document.getElementById('newEventNotes')
+        var newEventStartsDate = document.getElementById('newEventStartsDate')
+        var newEventStartsTime = document.getElementById('newEventStartsTime')
+        var newEventEndsDate = document.getElementById('newEventEndsDate')
+        var newEventEndsTime = document.getElementById('newEventEndsTime')
+        newEventStartsDate.value = $.fullCalendar.formatDate(start, "Y-MM-DD");
+        newEventEndsDate.value = $.fullCalendar.formatDate(end, "Y-MM-DD");
+        // Make sure the user can't pick a date in the past validation
+        // https://bobbyhadz.com/blog/javascript-set-current-date-to-input
+        function padTo2Digits(num) {
+          return num.toString().padStart(2, '0');
+        }
+        function formatDate(date = new Date()) {
+          return [
+            date.getFullYear(),
+            padTo2Digits(date.getMonth() + 1),
+            padTo2Digits(date.getDate()),
+          ].join('-');
+        }
+        newEventStartsDate.min = formatDate();
+        newEventEndsDate.min = formatDate();
+        // TODO: Make sure the user can't pick a start time that conflicts with the end time validation
+        const createEventForm = document.getElementById('create-event-form')
+        createEventForm.addEventListener('submit', createEventForm => {
+          createEventForm.preventDefault()
+          $.ajax({
+            type: "POST",
+            url: '/add-event',
+            data: {
+              'csrfmiddlewaretoken': csrftoken,
+              'newEventType': newEventType.value,
+              'title': newEventName.value,
+              'start-date': newEventStartsDate.value,
+              'start-time': newEventStartsTime.value,
+              'end-date': newEventEndsDate.value,
+              'end-time': newEventEndsTime.value,
+              'notes': newEventNotes.value,
+            },
+            dataType: "json",
+            success: function (data) {
+              calendar.fullCalendar('refetchEvents');
+              $("#create-event-modal").modal("toggle");
+              createAlert('Event was created successfully!')
+              newEventType.value = ''
+              newEventName.value = ''
+              newEventNotes.value = ''
+              newEventStarts.value = ''
+              newEventEnds.value = ''
+            },
+            error: function (data) {
+              createAlert('There was a problem creating your event, please try again.')
+            }
+          }); // End AJAX
+        }); // End form submit listener
+      },
+      eventRender: function (event, element, view) {
+        element.find('.fc-title').append(`<i style="margin-right:-5%;" class='ri-delete-bin-2-fill' type='button' data-tip='${event.id}' onclick='getEventIdForDelete(this)' data-bs-toggle='modal' data-bs-target='#delete-event-modal'><span style="color:transparent;">${event.title}</span></i>`);
+        element.bind('dblclick', function () {
+          // Get input field elements
+          var eventTypeUpdate = document.getElementById('eventTypeUpdate')
+          var eventNameUpdate = document.getElementById('eventNameUpdate') // get the fields, add values to form, on save it submits 
+          var notesUpdate = document.getElementById('notesUpdate')
+          var newEventStartsDateUpdate = document.getElementById('newEventStartsDateUpdate')
+          var newEventStartsTimeUpdate = document.getElementById('newEventStartsTimeUpdate')
+          var newEventEndsDateUpdate = document.getElementById('newEventEndsDateUpdate')
+          var newEventEndsTimeUpdate = document.getElementById('newEventEndsTimeUpdate')
+          // Fill fields with "Event" details to update
+          eventTypeUpdate.options[eventTypeUpdate.selectedIndex].text = event.event_type
+          eventNameUpdate.value = event.title
+          notesUpdate.value = event.notes
+          // Format "Date" fields + fill with "Event" details to update
+          newEventStartsDateUpdate.value = $.fullCalendar.formatDate(event.start, "Y-MM-DD");
+          newEventEndsDateUpdate.value = $.fullCalendar.formatDate(event.end, "Y-MM-DD");
+          // Format "Time" fields (text) + fill with "Event" details to update
+          newEventStartsTimeUpdate.options[newEventStartsTimeUpdate.selectedIndex].text = $.fullCalendar.formatDate(event.start, "hh:mm A");
+          newEventEndsTimeUpdate.options[newEventEndsTimeUpdate.selectedIndex].text = $.fullCalendar.formatDate(event.end, "hh:mm A");
+          // Format "Time" fields (value) + fill with "Event" details to update (With correct value format)
+          newEventStartsTimeUpdate.options[newEventStartsTimeUpdate.selectedIndex].value = $.fullCalendar.formatDate(event.start, "HH:mm:ss");
+          newEventEndsTimeUpdate.options[newEventEndsTimeUpdate.selectedIndex].value = $.fullCalendar.formatDate(event.end, "HH:mm:ss");
+          $("#view-event-modal").modal("toggle");
+          const eventUpdateForm = document.getElementById('eventUpdateForm')
+          eventUpdateForm.addEventListener('submit', eventUpdateForm => {
+            eventUpdateForm.preventDefault()
+            $.ajax({
+              type: 'POST',
+              url: '/update-event',
+              data: {
+                'csrfmiddlewaretoken': csrftoken,
+                'eventTypeUpdate': eventTypeUpdate.value,
+                'eventNameUpdate': eventNameUpdate.value,
+                'start-date': newEventStartsDateUpdate.value,
+                'start-time': newEventStartsTimeUpdate.value,
+                'end-date': newEventEndsDateUpdate.value,
+                'end-time': newEventEndsTimeUpdate.value,
+                'notesUpdate': notesUpdate.value,
+                'id': event.id
+              },
+              dataType: "json",
+              success: function (data) {
+                console.log(data)
+                calendar.fullCalendar('refetchEvents');
+                $("#view-event-modal").modal("toggle");
+                createAlert('Your event has been updated!')
+              },
+              error: function (data) {
+                createAlert('There was a problem updating your event, please try again.')
+              }
+            }); // End AJAX
+          }); // End form event listener
+        }); // End double click function
+      }, // End eventRender 
+    }); // End calendar code
+
+    $("#calendar").find('.fc-toolbar .fc-left').append(`
+        <button style="font-size: 15px;" class="mt-2 btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#create-event-modal">
+          Create Your Event <i class="ri-add-circle-fill"></i>
+        </button>
+      `)
+
+  }); // End main function (runs on page load)
+
+</script>
