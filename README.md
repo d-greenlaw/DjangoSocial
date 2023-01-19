@@ -9,21 +9,21 @@
 <h4 align="center">A Web App Written Using the <a href="https://www.djangoproject.com/" target="_blank">Django Framework </a> and JavaScript.</h4>
 
 <p align="center">
-  <a href="#project-overview">Project Overview</a> •
-  <a href="#posting-features">Posting Features</a> •
-  <a href="#profile-features">Profile Features</a> •
-  <a href="#live-chat-features">Live Chat Features</a> •
-  <a href="#event-features">Event Features</a> •
-  <a href="#poll-features">Poll Features</a> •
+  <a href="#project-overview">Overview</a> •
+  <a href="#posting-features">Posting</a> •
+  <a href="#profile-features">Profile</a> •
+  <a href="#live-chat-features">Live Chat</a> •
+  <a href="#event-features">Events</a> •
+  <a href="#poll-features">Polls</a> •
   <a href="#notification-features">Notifications</a> •
   <a href="#in-development">In Development</a>
 </p>
 
 ## Project Overview
 
-* You can test this project in the [Live Server](bit.ly/django-social-live). Use the dummy accounts found on the login page, one for each tab to emulate multiple user interaction, or make your own account!
+* You can test this project in the [Live Server](https://bit.ly/django-social-live). Use the dummy accounts found on the login page, one for each tab to emulate multiple user interaction, or make your own account!
 
-* Here is a [demo video](bit.ly/django-social-demo-video) of the project in action.
+* Here is a [demo video](https://bit.ly/django-social-demo) of the project in action.
 
 * Or feel free to download the code and run the app on your local machine.
 
