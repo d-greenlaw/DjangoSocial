@@ -23,7 +23,7 @@
 
 * You can test this project in the [Live Server](https://bit.ly/django-social-live). Use the dummy accounts found on the login page, one for each tab to emulate multiple user interaction, or make your own account!
 
-* Here is a [demo video](https://bit.ly/django-social-demo) of the project in action.
+* Here is a [Demo Video](https://bit.ly/django-social-demo) of the project in action.
 
 * Or feel free to download the code and run the app on your local machine.
 
