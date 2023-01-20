@@ -23,7 +23,7 @@
 
 * Please browse the code for this project here on GitHub. It is my cornerstone project and displays my most current skills!
 
-* Here you can watch a brief [Demo Video](https://drive.google.com/file/d/1Wiy-JPdOTzLNMBUP2e2uVQvvRgaTZXnT/view?usp=sharing) of the project in action.
+* Here you can watch a brief [Demo Video](https://drive.google.com/file/d/1yYO12gMOj4jM-2yUD2bBn8mQjP8FhEti/view?usp=sharing) of the project in action.
 
 * You can also test the app on the [Live Server](https://djangosocial-production.up.railway.app/). Feel free to use the dummy accounts found on the login page, or make your own account.
 
